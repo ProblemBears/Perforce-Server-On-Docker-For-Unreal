@@ -1,70 +1,48 @@
+# Perforce Server Docker Compose Configuration
+# 
+# This runs a single Perforce (Helix Core) server in a Docker container
+# Configured for Unreal Engine projects with case-insensitive mode
+#
+# BEFORE RUNNING:
+# 1. Change P4PASSWD below to your desired password
+# 2. Update volume paths if your Synology doesn't use /volume1/
+# 3. Create the required folders (see README.md)
+
 networks:
   perforce_network:
     driver: bridge
-    #external: true
 
 services:
   perforce:
     container_name: Perforce-Server
     hostname: perforce
+    
+    # Volume mappings - data persists here on your NAS
+    # UPDATE THESE PATHS if your volume name is different (e.g., volume2)
     volumes:
-      - /mnt/user/appdata/perforce-server/logs:/data/p4depot/logs
-      - /mnt/user/Perforce/:/data
+      - /volume1/docker/perforce/logs:/data/p4depot/logs
+      - /volume1/docker/perforce/data:/data
+    
+    # Ports exposed to your network
     ports:
-      - "1666:1666"
+      - "1666:1666"  # Main Perforce server port (use this in P4V)
+      # - "8080:8080"  # Optional: uncomment for web interface
+    
+    # Environment variables - CHANGE THE PASSWORD!
     environment:
-      - P4PORT=ssl:1666
-      - P4SSLDIR=/data/p4depot/ssl
-      - P4ROOT=/data/p4depot
-      - P4USER=admin
-      - P4USER=p4admin
-      - P4PASSWD=pass12349ers!
+      - P4PORT=ssl:1666                          # Use SSL encryption
+      - P4SSLDIR=/data/p4depot/ssl              # SSL certificate location
+      - P4ROOT=/data/p4depot                    # Depot root directory
+      - P4USER=p4admin                          # Admin username (you can change this)
+      - P4PASSWD=CHANGE_ME_YOUR_PASSWORD_HERE   # ⚠️ CHANGE THIS PASSWORD!
+    
+    # Build configuration - builds from local Dockerfile
     build:
       context: .
       dockerfile: Dockerfile
-    #restart: unless-stopped  # Optional: Restart the container if it stops unexpectedly
-    networks:
-      - perforce_network
-      
-  helix-swarm:
-    container_name: Perforce-Swarm
-    image: perforce/helix-swarm:latest
-    hostname: helix-swarm
-    domainname: helix
-    volumes:
-      - /mnt/user/appdata/perforce-swarm/swarm-data:/opt/perforce/swarm/data
-      - /mnt/user/appdata/perforce-swarm/www:/var/www
-    ports:
-      - "8089:80"
-    working_dir: /opt/perforce/swarm
-    depends_on:
-      - helix-redis
-      - perforce
-    tty: false
-    environment:
-      - P4D_PORT=ssl:192.168.1.238:1666
-      - P4D_SUPER=p4admin
-      - P4D_SUPER_PASSWD=pass12349ers!
-      - SWARM_USER=Van
-      - SWARM_PASSWD=pass12349ers!
-      - SWARM_HOST=helix-swarm
-      - SWARM_REDIS=helix-redis
-      - SWARM_REDIS_PORT=7379
-
-        # If set to 'y', then extensions will be installed even if they already
-        # exist, overwriting existing configuration.
-      - SWARM_FORCE_EXT=y
-    networks:
-      - perforce_network
-
-
-  helix-redis:
-    container_name: Perforce-Swarm-Redis
-    image: "redis"
-    hostname: helix-redis
-    domainname: helix
-    command: redis-server --protected-mode no --port 7379 --appendonly yes
-    volumes:
-      - /mnt/user/appdata/perforce-swarm/redis-data:/data
+    
+    # Auto-restart policy (survives NAS reboots and power outages)
+    restart: unless-stopped
+    
     networks:
       - perforce_network

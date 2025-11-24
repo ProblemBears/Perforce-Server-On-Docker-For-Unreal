@@ -1,27 +1,20 @@
-# A Perforce User Specification.
+# Perforce User Specification
 #
-#  User:        The user's user name.
-#  Type:        Either 'service', 'operator', or 'standard'.
-#               Default: 'standard'. Read only.
-#  Email:       The user's email address; for email review.
-#  Update:      The date this specification was last modified.
-#  Access:      The date this user was last active.  Read only.
-#  FullName:    The user's real name.
-#  JobView:     Selects jobs for inclusion during changelist creation.
-#  Password:    If set, user must have matching $P4PASSWD on client.
-#  AuthMethod:  'perforce' if using standard authentication or 'ldap' if
-#               this user should use native LDAP authentication.
-#  Reviews:     Listing of depot files to be reviewed by user.
+# This file defines the initial admin user for the Perforce server.
+# The password set here will be OVERRIDDEN by the P4PASSWD environment 
+# variable in docker-compose.yml - so you only need to change it there.
+#
+# BEFORE RUNNING:
+# - Change the Email to your real email (for notifications)
+# - Optionally change FullName to your actual name
 
 User:	p4admin
-Email:	p4admin@perforce
-Update:	2025/06/26 13:38:29
-Access:	2025/06/26 13:51:09
-FullName:	Perforce Admin
 
-User:	Van
-Email:	p4admin@perforce
-Update:	2025/06/26 13:38:29
-Access:	2025/06/26 13:51:09
-FullName:	Van F.
-Password: pass12349ers!
+Email:	admin@yourcompany.com
+# ⬆️ CHANGE THIS to your real email address
+
+FullName:	Perforce Administrator
+# ⬆️ CHANGE THIS to your name (optional)
+
+# Password is set via P4PASSWD environment variable in docker-compose.yml
+# You don't need to change it here

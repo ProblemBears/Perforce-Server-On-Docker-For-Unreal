@@ -4,7 +4,6 @@ export NAME="${NAME:-p4depot}"
 export CASE_INSENSITIVE="${CASE_INSENSITIVE:-0}"
 export P4ROOT="${DATAVOLUME}/${NAME}"
 
-
 # Ensure SSL directory exists
 SSL_DIR="${P4ROOT}/ssl"
 if [ ! -d "$SSL_DIR" ]; then
@@ -28,7 +27,6 @@ if [ ! -f "$SSL_DIR/server.crt" ] || [ ! -f "$SSL_DIR/server.key" ]; then
     chown perforce:perforce "$SSL_DIR/server.key"
     chown perforce:perforce "$SSL_DIR/server.crt"
 fi
-
 
 if [ ! -d $DATAVOLUME/etc ]; then
     echo >&2 "First time installation, copying configuration from /etc/perforce to $DATAVOLUME/etc and relinking"
@@ -101,12 +99,6 @@ if echo "$P4PORT" | grep -q '^ssl:'; then
     p4 trust -y
 fi
 
-# Login to Perforce (initial password)
-echo "Logging in to Perforce with password $P4PASSWD..."
-#p4 login <<EOF
-#$P4PASSWD
-#EOF
-
 if [ "$FRESHINSTALL" = "1" ]; then
     ## Load up the default tables
     echo >&2 "First time installation, setting up defaults for p4 user, group and protect tables"
@@ -126,9 +118,6 @@ if [ "$FRESHINSTALL" = "1" ]; then
     # Update the Typemap
     # Based on : https://x157.github.io/Perforce/Typemap
 	cat /root/typemap.txt | p4 typemap -i
-	
-	# Set perforce server to Unicode so it plays nice with Swarm
-	p4d -xi
 
 fi
 
@@ -140,6 +129,3 @@ if [ "$P4PASSWD" == "pass12349ers!" ]; then
     echo "   P4PASSWD=$P4PASSWD"
     echo -e "\n***** WARNING: USING DEFAULT PASSWORD ******\n"
 fi
-
-# exec /usr/bin/p4web -U perforce -u $P4USER -b -p $P4PORT -P "$P4PASSWD" -w 8080
-
