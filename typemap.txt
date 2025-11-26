@@ -1,23 +1,183 @@
 #
-# Perforce File Type Mapping Specifications.
+# Universal Perforce File Type Mapping Specifications
+# Optimized for: Unreal Engine, Unity, and DCC Tools
 #
-#  TypeMap:    a list of filetype mappings; one per line.
-#              Each line has two elements:
+# TypeMap: a list of filetype mappings; one per line.
+#          Each line has two elements:
 #
-#              Filetype: The filetype to use on 'p4 add'.
-#
-#              Path:     File pattern which will use this filetype.
+#          Filetype: The filetype to use on 'p4 add'.
+#          Path:     File pattern which will use this filetype.
 #
 # See 'p4 help typemap' for more information.
 
 TypeMap:
     ######################################################################
-    ###  For help, see:
-    ###    https://github.com/XistGG/Perforce-Setup
+    ###  UNREAL ENGINE FILES
     ######################################################################
-    ### Generated Binary files writable by everyone all the time
+    
+    ### Unreal Binary Assets (must checkout to edit)
+    binary+l //....uasset
+    binary+l //....ubulk
+    binary+l //....udk
+    binary+l //....umap
+    binary+l //....upk
+    
+    ### Unreal Text Files
+    text //....uproject
+    text //....uplugin
+    
     ######################################################################
-    binary+wx //....exe
+    ###  UNITY FILES
+    ######################################################################
+    
+    ### Unity Binary Assets (must checkout to edit)
+    binary+l //....unity
+    binary+l //....prefab
+    binary+l //....asset
+    binary+l //....cubemap
+    binary+l //....controller
+    binary+l //....overrideController
+    binary+l //....mask
+    binary+l //....mat
+    binary+l //....physicMaterial
+    binary+l //....physicsMaterial2D
+    binary+l //....renderTexture
+    binary+l //....spriteatlas
+    binary+l //....terrainlayer
+    binary+l //....mixer
+    binary+l //....shadervariants
+    binary+l //....lightingdata
+    
+    ### Unity Text Files (YAML-based - can merge)
+    text //....meta
+    text //....asmdef
+    text //....asmref
+    
+    ######################################################################
+    ###  DCC TOOLS - PHOTOSHOP
+    ######################################################################
+    binary+l //....psd
+    binary+l //....psb
+    binary+l //....abr      # Brushes
+    binary+l //....asl      # Styles
+    binary+l //....atn      # Actions
+    binary+l //....pat      # Patterns
+    
+    ######################################################################
+    ###  DCC TOOLS - BLENDER
+    ######################################################################
+    binary+l //....blend
+    binary+l //....blend1   # Blender backup
+    
+    ######################################################################
+    ###  DCC TOOLS - MAYA
+    ######################################################################
+    binary+l //....ma       # Maya ASCII (technically text, but treat as binary for locking)
+    binary+l //....mb       # Maya Binary
+    
+    ######################################################################
+    ###  DCC TOOLS - 3DS MAX
+    ######################################################################
+    binary+l //....max
+    
+    ######################################################################
+    ###  DCC TOOLS - ZBRUSH
+    ######################################################################
+    binary+l //....ztl
+    binary+l //....zpr
+    
+    ######################################################################
+    ###  DCC TOOLS - SUBSTANCE
+    ######################################################################
+    binary+l //....sbs      # Substance Designer
+    binary+l //....sbsar    # Substance Archive
+    binary+l //....spp      # Substance Painter
+    
+    ######################################################################
+    ###  DCC TOOLS - HOUDINI
+    ######################################################################
+    binary+l //....hip
+    binary+l //....hipnc
+    binary+l //....hda
+    
+    ######################################################################
+    ###  DCC TOOLS - CINEMA 4D
+    ######################################################################
+    binary+l //....c4d
+    
+    ######################################################################
+    ###  AUDIO FILES
+    ######################################################################
+    binary+l //....wav
+    binary+lF //....mp3     # Compressed, don't try to diff
+    binary+lF //....ogg
+    binary+lF //....m4a
+    binary+l //....aif
+    binary+l //....aiff
+    binary+l //....flac
+    
+    ### Audio Project Files
+    binary+l //....ptx      # Pro Tools
+    binary+l //....als      # Ableton Live
+    binary+l //....flp      # FL Studio
+    binary+l //....rpp      # Reaper
+    
+    ######################################################################
+    ###  VIDEO FILES
+    ######################################################################
+    binary+lF //....mp4
+    binary+lF //....mov
+    binary+lF //....avi
+    binary+lF //....wmv
+    binary+lF //....webm
+    
+    ### Video Project Files
+    binary+l //....prproj   # Premiere Pro
+    binary+l //....aep      # After Effects
+    binary+l //....drp      # DaVinci Resolve
+    
+    ######################################################################
+    ###  COMMON IMAGE FILES
+    ######################################################################
+    
+    ### Raw/Editable Images (must checkout to edit)
+    binary+l //....bmp
+    binary+l //....ico
+    binary+l //....tga
+    binary+l //....tif
+    binary+l //....tiff
+    binary+l //....exr
+    binary+l //....hdr
+    
+    ### Compressed Images (locked, don't try to diff)
+    binary+lF //....gif
+    binary+lF //....jpg
+    binary+lF //....jpeg
+    binary+lF //....png
+    binary+lF //....webp
+    
+    ######################################################################
+    ###  FONTS
+    ######################################################################
+    binary+l //....ttf
+    binary+l //....otf
+    binary+l //....woff
+    binary+l //....woff2
+    
+    ######################################################################
+    ###  3D MODEL INTERCHANGE FORMATS
+    ######################################################################
+    binary+l //....fbx
+    binary+l //....obj
+    binary+l //....dae      # Collada
+    binary+l //....gltf
+    binary+l //....glb
+    binary+l //....stl
+    
+    ######################################################################
+    ###  GENERATED BINARY FILES (writable by everyone, all the time)
+    ######################################################################
+    binary+w //....exe
     binary+w //....exp
     binary+w //....a
     binary+w //....debug
@@ -27,96 +187,98 @@ TypeMap:
     binary+w //....app
     binary+w //....dylib
     binary+w //....so
-    ## versioned shared objects like "libfoo.so.1"
     binary+w //.../lib*.so.*
     binary+w //....sym
     binary+w //....stub
     binary+w //....ipa
-    ######################################################################
-    ### Generated Binaries writable by everyone (keep only latest revision)
-    ######################################################################
+    binary+w //....apk
+    
+    ### Generated Binaries (keep only latest revision)
     binary+Sw //....pdb
+    
     ######################################################################
-    ### Raw Binary assets that must be checked out to be modified
+    ###  TEXT/CODE FILES
     ######################################################################
-    binary+l //....blend
-    binary+l //....bmp
-    binary+l //....ico
-    binary+l //....fbx
-    binary+l //....max
-    binary+l //....psd
-    binary+l //....tga
-    binary+l //....tif
-    binary+l //....tiff
-    binary+l //....tps
-    binary+l //....ttf
-    binary+l //....uasset
-    binary+l //....ubulk
-    binary+l //....udk
-    binary+l //....umap
-    binary+l //....upk
-    binary+l //....wmv
-    binary+l //....wav
-    ######################################################################
-    ### Compressed Binary assets that must be checked out to be modified
-    ######################################################################
-    binary+lF //....gif
-    binary+lF //....jpg
-    binary+lF //....jpeg
-    binary+lF //....mp3
-    binary+lF //....mp4
-    binary+lF //....ogg
-    binary+lF //....png
-    ######################################################################
-    ### Text files
-    ######################################################################
+    
+    ### Scripts
     text+x //....bat
-    text //....c
-    text //....cmd
-    text //....collection
+    text+x //....cmd
     text+x //....command
-    text //....config
+    text+x //....sh
+    
+    ### Source Code
+    text //....c
     text //....cpp
     text //....cs
-    ## Visual Studio updates .csproj.props without regard for Perforce (add +w)
-    text+w //....csproj.props
-    text //....csv
-    ## Rider updates .DotSettings without regard for perforce (add +w)
-    text+w //....DotSettings
-    text //....editorconfig
-    text //....gitattributes
-    text //....gitignore
-    text //....gitmodules
     text //....h
-    text //....ini
-    text //....json
+    text //....hpp
     text //....m
-    text //....md
     text //....mm
-    text //....p4ignore
-    ## XCode updates .plist without regard for perforce (add +w)
-    text+w //....plist
     text //....py
-    text+x //....sh
-    text //....svg
-    text //....tps
-    text //....txt
-    text //....uplugin
-    text //....uproject
+    text //....js
+    text //....ts
+    text //....jsx
+    text //....tsx
+    text //....java
+    text //....kt       # Kotlin
+    text //....swift
+    text //....go
+    text //....rs       # Rust
+    
+    ### Shaders
+    text //....shader
+    text //....hlsl
+    text //....glsl
+    text //....cg
+    text //....compute
+    text //....uss      # Unity StyleSheet
+    text //....uxss
+    
+    ### Config/Data Files
+    text //....ini
+    text //....config
+    text //....json
     text //....xml
     text //....yml
+    text //....yaml
+    text //....toml
+    text //....csv
+    text //....tsv
+    
+    ### Markup/Documentation
+    text //....md
+    text //....txt
+    text //....html
+    text //....css
+    text //....svg
+    
+    ### Git/Source Control
+    text //....gitignore
+    text //....gitattributes
+    text //....gitmodules
+    text //....p4ignore
+    
+    ### IDE/Editor Config
+    text //....editorconfig
+    text+w //....csproj.props
+    text+w //....DotSettings
+    text+w //....plist
+    
     ######################################################################
-    ### Localization files
+    ###  LOCALIZATION FILES
     ######################################################################
     binary+l //.../Localization/....locmeta
     binary+l //.../Localization/....locres
     binary+l //.../Localization/....po
     text //.../Localization/....archive
     text //.../Localization/....manifest
+    
     ######################################################################
-    ### Generated Build files writable by everyone all the time
-    ### NOTE- MUST PUT THESE **AFTER** THE CATCH-ALL //....type VERSIONS ABOVE
+    ###  GENERATED BUILD FILES (writable by everyone, all the time)
+    ###  MUST BE AFTER CATCH-ALL VERSIONS ABOVE
     ######################################################################
+    
+    ### Unreal Generated Files
     text+w //.../Binaries/....config
     text+w //.../Binaries/....modules
     text+w //.../Binaries/....json
@@ -124,12 +286,18 @@ TypeMap:
     text+w //.../Binaries/....version
     text+w //.../Binaries/....xml
     text+w //.../Build/....version
+    
+    ### Unity Generated Files
+    text+w //.../Library/....json
+    text+w //.../Library/....asset
+    
     ######################################################################
-    ### Generated Build source
-    ### These files are typically found in ThirdParty build directories,
-    ### and the build process doesn't reliably check them out.
+    ###  GENERATED BUILD SOURCE (writable)
+    ###  These files are in ThirdParty build directories
     ######################################################################
     +w //.../Engine/Plugins/.../Source/.../bin/...
     +w //.../Engine/Plugins/.../Source/.../obj/...
     +w //.../Engine/Source/.../bin/...
     +w //.../Engine/Source/.../obj/...
+    +w //.../Plugins/.../Source/.../bin/...
+    +w //.../Plugins/.../Source/.../obj/...
